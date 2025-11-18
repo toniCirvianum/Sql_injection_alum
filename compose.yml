@@ -1,0 +1,37 @@
+services:
+  php:
+    image: php:8.3-apache-bullseye
+    volumes:
+      - ./:/var/www/html
+    expose:
+      - 80
+    ports:
+      - 80:80 #Port de la web en aquest cas el 80
+    command:
+      - bash
+      - -c
+      - |
+        chmod +x script.sh && 
+        ./script.sh
+    extra_hosts: #comanda per poder executar el debuger
+      - "host.docker.internal:host-gateway"
+  mysql:
+    image: mysql:latest
+    environment:
+       MYSQL_ROOT_PASSWORD: "root" #pwsd de la BBDD i phphmyadmin per a root
+       MYSQL_DATABASE: "dbtest"  #nom de la base de dades
+       MYSQL_USER: "alum"   #usuari de la base de dades
+       MYSQL_PASSWORD: "123456" #pswd de l'usuari
+      #  MYSQL_ROOT_PASSWORD: ${DB_HOST} #pwsd de la BBDD i phphmyadmin per a root
+      #  MYSQL_DATABASE: ${DB_NAME}  #nom de la base de dades
+      #  MYSQL_USER: ${DB_USER}  #usuari de la base de dades
+      #  MYSQL_PASSWORD: ${DB_PASSWORD} #pswd de l'usuari
+
+    ports:
+      - "9999:3306" #port de la base de dades en aquest cas el 9999
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql #nom del host de la base de dades
+    ports:
+      - "8090:80" #port de phpmyadmin en aquest cas el 8090
