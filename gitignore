@@ -1,5 +1,0 @@
-/vendor
-.env
-credentials.php
-composer.json
-composer.lock
